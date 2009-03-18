@@ -10,6 +10,10 @@
 -- Stability   :  Stable
 -- Portability :  Requires OverloadedStrings
 --
+-- Note that I am thinking about putting some of the combinators
+-- (('<>'), ('<+>'), ('$$') and maybe more) in a type class. This
+-- allows the \'pretty\' package to use this package.
+--
 -----------------------------------------------------------------------------
 
 module Data.String.Combinators
