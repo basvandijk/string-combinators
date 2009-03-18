@@ -18,7 +18,7 @@ License-file:           LICENSE
 Author:                 Bas van Dijk <v.dijk.bas@gmail.com>
 Maintainer:             Bas van Dijk <v.dijk.bas@gmail.com>
 Copyright:              2009 Bas van Dijk <v.dijk.bas@gmail.com>
-Cabal-version:          >= 1.2
+Cabal-version:          >= 1.6
 Build-Type:             Simple
 Stability:              experimental
 
