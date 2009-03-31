@@ -133,27 +133,27 @@ between :: (Monoid s) => s -> s -> (s -> s)
 between open close x = open <> x <> close
 
 
--- | wrap a string in @(...)@
+-- | Wrap a string in @(...)@
 paren :: (Monoid s, IsString s) => s -> s
 paren = between "(" ")"
 
--- | wrap a string in @[...]@
+-- | Wrap a string in @[...]@
 brackets :: (Monoid s, IsString s) => s -> s
 brackets = between "[" "]"
 
--- | wrap a string in @{...}@
+-- | Wrap a string in @{...}@
 braces :: (Monoid s, IsString s) => s -> s
 braces = between "{" "}"
 
--- | wrap a string in @\<...\>@
+-- | Wrap a string in @\<...\>@
 angleBrackets :: (Monoid s, IsString s) => s -> s
 angleBrackets = between "<" ">"
 
--- | wrap a string in @\'...\'@
+-- | Wrap a string in @\'...\'@
 quotes :: (Monoid s, IsString s) => s -> s
 quotes = between "'" "'"
 
--- | wrap a string in @\"...\"@
+-- | Wrap a string in @\"...\"@
 doubleQuotes :: (Monoid s, IsString s) => s -> s
 doubleQuotes = between "\"" "\""
 
