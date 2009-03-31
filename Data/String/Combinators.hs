@@ -38,6 +38,8 @@ module Data.String.Combinators
     , quotes
     , doubleQuotes
 
+    , parenIf
+
       -- * From characters
     , char
 
@@ -154,6 +156,13 @@ quotes = between "'" "'"
 -- | wrap a string in @\"...\"@
 doubleQuotes :: (Monoid s, IsString s) => s -> s
 doubleQuotes = between "\"" "\""
+
+
+-- | Conditionally wrap a string in @(...)@
+-- Note the similarity with 'Text.ShowS.showParen'.
+parenIf :: (Monoid s, IsString s) => Bool -> s -> s
+parenIf True  = paren
+parenIf False = id
 
 
 ----------------------------------------------------------------------
