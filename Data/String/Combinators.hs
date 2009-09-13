@@ -23,6 +23,7 @@ module Data.String.Combinators
     , mid
     , (<+>)
     , ($$)
+    , intercalate
     , hcat
     , hsep
     , vcat
@@ -103,21 +104,33 @@ infixl 6 <>
 infixl 6 <+>
 infixl 5 $$
 
+-- | Combine the string-likes with a given function.
+intercalate :: Monoid s => (s -> s -> s) -> [s] -> s
+intercalate f = go
+    where
+      go []     = mempty
+      go (s:[]) = s
+      go (s:ss) = s `f` go ss
+
 -- | List version of '<>'.
+--
+-- Note that @hcat = 'intercalate' ('<>')@.
 hcat :: Monoid s => [s] -> s
-hcat = foldr (<>) mempty
+hcat = intercalate (<>)
 
 -- | List version of '<+>'.
+--
+-- Note that @hsep = 'intercalate' ('<+>')@.
 hsep :: (Monoid s, IsString s) => [s] -> s
-hsep = foldr (<+>) mempty
+hsep = intercalate (<+>)
 
 -- | List version of '$$'.
 vcat :: (Monoid s, IsString s) =>  [s] -> s
 vcat = foldr ($$) mempty
 
--- | @punctuate p [d1, ... dn] = [d1 \<> p, d2 \<> p, ... dn-1 \<> p, dn]@.
-
--- Shamelessly copied from 'pretty':
+-- | @punctuate p [d1, ... dn] = [d1 '<>' p, d2 '<>' p, ... dn-1 '<>' p, dn]@.
+--
+-- Idea and implementation taken from 'pretty':
 punctuate :: (Monoid s) => s -> [s] -> [s]
 punctuate _ []     = []
 punctuate p (d:ds) = go d ds
