@@ -10,8 +10,7 @@
 --------------------------------------------------------------------------------
 
 module Data.String.Combinators
-    (
-      -- * Combining
+    ( -- * Combining
       (<>)
     , mid
     , (<+>)
@@ -32,7 +31,6 @@ module Data.String.Combinators
     , angleBrackets
     , quotes
     , doubleQuotes
-
 
       -- * From characters
     , char
@@ -60,13 +58,12 @@ module Data.String.Combinators
     , float
     , double
     , rational
+    ) where
 
-    )
-    where
 
------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Imports
------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- from base:
 import Data.List     ( foldr )
@@ -85,18 +82,18 @@ import Data.Function.Unicode ( (∘) )
 
 
 --------------------------------------------------------------------------------
--- Combining
+-- * Combining
 --------------------------------------------------------------------------------
 
 -- | Put two string-likes besides eachother.
 --
--- Note that '<>' is just a synonym for 'mappend'.
+-- Note that: @'<>' = 'mappend'@.
 (<>) ∷ Monoid s ⇒ s → s → s
 (<>) = mappend
 
 -- | @mid m x y@ Puts @x@ and @y@ around @m@.
 --
--- Note that: @mid m x y =@ 'between' @x y m@.
+-- Note that: @mid m x y = 'between' x y m@.
 mid ∷ Monoid s ⇒ s → (s → s → s)
 mid m x y = between x y m
 
@@ -112,7 +109,10 @@ infixl 6 <>
 infixl 6 <+>
 infixl 5 $$
 
--- | Combine the string-likes with a given function.
+{-| Combine the string-likes with a given function.
+
+@intercalate f [s1, ... sn] = s1 \`f\` (s2 \`f\` (... (sn-1 \`f\` sn)))@
+-}
 intercalate ∷ Monoid s ⇒ (s → s → s) → [s] → s
 intercalate f = go
     where
@@ -122,25 +122,25 @@ intercalate f = go
 
 -- | List version of '<>'.
 --
--- Note that @hcat = 'intercalate' ('<>')@.
+-- Note that: @hcat = 'intercalate' ('<>')@.
 hcat ∷ Monoid s ⇒ [s] → s
 hcat = intercalate (<>)
 
 -- | List version of '<+>'.
 --
--- Note that @unwords = 'intercalate' ('<+>')@.
+-- Note that: @unwords = 'intercalate' ('<+>')@.
 unwords ∷ (Monoid s, IsString s) ⇒ [s] → s
 unwords = intercalate (<+>)
 
 -- | List version of '$$'.
 --
--- Note that @unlines = foldr ('$$') mempty@
+-- Note that: @unlines = foldr ('$$') mempty@
 unlines ∷ (Monoid s, IsString s) ⇒  [s] → s
 unlines = foldr ($$) mempty
 
--- | @punctuate p [d1, ... dn] = [d1 '<>' p, d2 '<>' p, ... dn-1 '<>' p, dn]@.
+-- | @punctuate p [s1, ... sn] = [s1 '<>' p, s2 '<>' p, ... sn-1 '<>' p, sn]@.
 --
--- Idea and implementation taken from the @pretty@ package.
+-- (Idea and implementation taken from the @pretty@ package.)
 punctuate ∷ (Monoid s) ⇒ s → [s] → [s]
 punctuate _ []     = []
 punctuate p (d:ds) = go d ds
@@ -150,7 +150,7 @@ punctuate p (d:ds) = go d ds
 
 
 --------------------------------------------------------------------------------
--- Wrapping in delimiters
+-- * Wrapping in delimiters
 --------------------------------------------------------------------------------
 
 -- | @between b c s@ wraps the string-like @s@ between @b@ and @c@.
@@ -183,13 +183,11 @@ doubleQuotes ∷ (Monoid s, IsString s) ⇒ s → s
 doubleQuotes = between "\"" "\""
 
 
-{- | Like @showParen@ conditionally wraps a string in @(...)@
+{-| Like @showParen@ conditionally wraps a string-like in @(...)@
 
 This function is supposed to be used infix as in:
 
-@
-(precedence >= 10) \`thenParen\` (\"fun\" \<+\> \"arg\")
-@
+@(precedence >= 10) \`thenParen\` (\"fun\" \<+\> \"arg\")@
 -}
 thenParen ∷ (Monoid s, IsString s) ⇒ Bool → s → s
 thenParen True  = paren
@@ -197,7 +195,7 @@ thenParen False = id
 
 
 --------------------------------------------------------------------------------
--- From characters
+-- * From characters
 --------------------------------------------------------------------------------
 
 -- | Convert a character to a string-like.
@@ -263,10 +261,10 @@ rabrack = char '>'
 
 
 --------------------------------------------------------------------------------
--- From showable values
+-- * From showable values
 --------------------------------------------------------------------------------
 
--- | Convert a @Show@able value to a string.
+-- | Convert a @Show@able value to a string-like.
 fromShow ∷ (Show α, IsString s) ⇒ α → s
 fromShow = fromString ∘ show
 
