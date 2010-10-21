@@ -24,8 +24,8 @@ module Data.String.Combinators
      -- * Wrapping in delimiters
     , between
 
-    , paren
-    , thenParen
+    , parens
+    , thenParens
     , brackets
     , braces
     , angleBrackets
@@ -159,8 +159,8 @@ between open close = \x -> open <> x <> close
 
 
 -- | Wrap a string-like in @(...)@.
-paren ∷ (Monoid s, IsString s) ⇒ s → s
-paren = between "(" ")"
+parens ∷ (Monoid s, IsString s) ⇒ s → s
+parens = between "(" ")"
 
 -- | Wrap a string-like in @[...]@.
 brackets ∷ (Monoid s, IsString s) ⇒ s → s
@@ -187,11 +187,11 @@ doubleQuotes = between "\"" "\""
 
 This function is supposed to be used infix as in:
 
-@(precedence >= 10) \`thenParen\` (\"fun\" \<+\> \"arg\")@
+@(precedence >= 10) \`thenParens\` (\"fun\" \<+\> \"arg\")@
 -}
-thenParen ∷ (Monoid s, IsString s) ⇒ Bool → s → s
-thenParen True  = paren
-thenParen False = id
+thenParens ∷ (Monoid s, IsString s) ⇒ Bool → s → s
+thenParens True  = parens
+thenParens False = id
 
 
 --------------------------------------------------------------------------------
