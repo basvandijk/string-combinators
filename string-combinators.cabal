@@ -21,7 +21,7 @@ Source-repository head
   Location: http://code.haskell.org/~basvandijk/code/string-combinators/
 
 Library
-  Build-Depends: base                 >= 4     && < 4.3
+  Build-Depends: base                 >= 4     && < 4.4
                , base-unicode-symbols >= 0.1.1 && < 0.3
   Exposed-modules: Data.String.Combinators
   Ghc-options: -Wall
