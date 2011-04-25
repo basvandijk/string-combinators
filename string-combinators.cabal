@@ -17,6 +17,8 @@ Cabal-version: >= 1.6
 Build-Type:    Simple
 Stability:     experimental
 
+extra-source-files: README.markdown
+
 Source-repository head
   Type:     git
   Location: git://github.com/basvandijk/string-combinators.git
