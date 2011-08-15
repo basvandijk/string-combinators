@@ -12,7 +12,7 @@ License-file:  LICENSE
 Author:        Bas van Dijk <v.dijk.bas@gmail.com>
 Maintainer:    Bas van Dijk <v.dijk.bas@gmail.com>
 Bug-Reports:   https://github.com/basvandijk/string-combinators/issues
-Copyright:     2009-2010 Bas van Dijk <v.dijk.bas@gmail.com>
+Copyright:     2009-2011 Bas van Dijk <v.dijk.bas@gmail.com>
 Cabal-version: >= 1.6
 Build-Type:    Simple
 Stability:     experimental
