@@ -24,7 +24,7 @@ Source-repository head
   Location: git://github.com/basvandijk/string-combinators.git
 
 Library
-  Build-Depends: base                 >= 4     && < 4.4
+  Build-Depends: base                 >= 4     && < 4.5
                , base-unicode-symbols >= 0.1.1 && < 0.3
   Exposed-modules: Data.String.Combinators
   Ghc-options: -Wall
