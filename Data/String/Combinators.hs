@@ -1,4 +1,8 @@
-{-# LANGUAGE OverloadedStrings, NoImplicitPrelude, UnicodeSyntax #-}
+{-# LANGUAGE CPP, OverloadedStrings, NoImplicitPrelude, UnicodeSyntax #-}
+
+#if __GLASGOW_HASKELL__ >= 704
+{-# LANGUAGE Safe #-}
+#endif
 
 --------------------------------------------------------------------------------
 -- |
@@ -287,6 +291,3 @@ double = fromShow
 -- | Convert a @Rational@ to a string-like.
 rational ∷ IsString s ⇒ Rational → s
 rational = fromShow
-
-
--- The End ---------------------------------------------------------------------
