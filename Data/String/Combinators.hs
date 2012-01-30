@@ -77,23 +77,28 @@ import Data.Function ( id )
 import Data.Int      ( Int )
 import Data.Ratio    ( Rational )
 import Data.String   ( IsString, fromString )
-import Data.Monoid   ( Monoid, mempty, mappend )
+import Data.Monoid   ( Monoid, mempty )
 import Text.Show     ( Show, show )
 import Prelude       ( Integer, Float, Double )
 
 -- from base-unicode-symbols
 import Data.Function.Unicode ( (∘) )
 
-
---------------------------------------------------------------------------------
--- * Combining
---------------------------------------------------------------------------------
-
+#if MIN_VERSION_base(4,5,0)
+import Data.Monoid ( (<>) )
+#else
+import Data.Monoid ( mappend )
 -- | Put two string-likes besides eachother.
 --
 -- Note that: @'<>' = 'mappend'@.
 (<>) ∷ Monoid s ⇒ s → s → s
 (<>) = mappend
+infixl 6 <>
+#endif
+
+--------------------------------------------------------------------------------
+-- * Combining
+--------------------------------------------------------------------------------
 
 -- | @mid m x y@ Puts @x@ and @y@ around @m@.
 --
@@ -109,7 +114,6 @@ mid m x y = between x y m
 ($$) ∷ (Monoid s, IsString s) ⇒ s → s → s
 ($$) = mid newline
 
-infixl 6 <>
 infixl 6 <+>
 infixl 5 $$
 

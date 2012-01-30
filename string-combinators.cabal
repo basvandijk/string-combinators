@@ -1,5 +1,5 @@
 Name:          string-combinators
-Version:       0.6.0.2
+Version:       0.6.0.3
 Synopsis:      Polymorphic functions to build and combine stringlike values
 Description:   @string-combinators@ provides handy polymorphic functions
                to build and combine string-like values.
