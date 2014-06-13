@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP, OverloadedStrings, NoImplicitPrelude, UnicodeSyntax #-}
+{-# LANGUAGE CPP, OverloadedStrings, NoImplicitPrelude #-}
 
 #if __GLASGOW_HASKELL__ >= 704
 {-# LANGUAGE Safe #-}
@@ -73,16 +73,13 @@ module Data.String.Combinators
 import Data.List     ( foldr )
 import Data.Bool     ( Bool(False, True) )
 import Data.Char     ( Char )
-import Data.Function ( id )
+import Data.Function ( id, (.) )
 import Data.Int      ( Int )
 import Data.Ratio    ( Rational )
 import Data.String   ( IsString, fromString )
 import Data.Monoid   ( Monoid, mempty )
 import Text.Show     ( Show, show )
 import Prelude       ( Integer, Float, Double )
-
--- from base-unicode-symbols
-import Data.Function.Unicode ( (∘) )
 
 #if MIN_VERSION_base(4,5,0)
 import Data.Monoid ( (<>) )
@@ -91,7 +88,7 @@ import Data.Monoid ( mappend )
 -- | Put two string-likes besides eachother.
 --
 -- Note that: @'<>' = 'mappend'@.
-(<>) ∷ Monoid s ⇒ s → s → s
+(<>) :: Monoid s => s -> s -> s
 (<>) = mappend
 infixl 6 <>
 #endif
@@ -103,15 +100,15 @@ infixl 6 <>
 -- | @mid m x y@ Puts @x@ and @y@ around @m@.
 --
 -- Note that: @mid m x y = 'between' x y m@.
-mid ∷ Monoid s ⇒ s → (s → s → s)
+mid :: Monoid s => s -> (s -> s -> s)
 mid m x y = between x y m
 
 -- | Put two string-likes besides eachother separated by a 'space'.
-(<+>) ∷ (Monoid s, IsString s) ⇒ s → s → s
+(<+>) :: (Monoid s, IsString s) => s -> s -> s
 (<+>) = mid space
 
 -- | Put two string-likes above eachother (separated by a 'newline').
-($$) ∷ (Monoid s, IsString s) ⇒ s → s → s
+($$) :: (Monoid s, IsString s) => s -> s -> s
 ($$) = mid newline
 
 infixl 6 <+>
@@ -121,7 +118,7 @@ infixl 5 $$
 
 @intercalate f [s1, ... sn] = s1 \`f\` (s2 \`f\` (... (sn-1 \`f\` sn)))@
 -}
-intercalate ∷ Monoid s ⇒ (s → s → s) → [s] → s
+intercalate :: Monoid s => (s -> s -> s) -> [s] -> s
 intercalate f = go
     where
       go []     = mempty
@@ -131,25 +128,25 @@ intercalate f = go
 -- | List version of '<>'.
 --
 -- Note that: @hcat = 'intercalate' ('<>')@.
-hcat ∷ Monoid s ⇒ [s] → s
+hcat :: Monoid s => [s] -> s
 hcat = intercalate (<>)
 
 -- | List version of '<+>'.
 --
 -- Note that: @unwords = 'intercalate' ('<+>')@.
-unwords ∷ (Monoid s, IsString s) ⇒ [s] → s
+unwords :: (Monoid s, IsString s) => [s] -> s
 unwords = intercalate (<+>)
 
 -- | List version of '$$'.
 --
 -- Note that: @unlines = foldr ('$$') mempty@
-unlines ∷ (Monoid s, IsString s) ⇒  [s] → s
+unlines :: (Monoid s, IsString s) =>  [s] -> s
 unlines = foldr ($$) mempty
 
 -- | @punctuate p [s1, ... sn] = [s1 '<>' p, s2 '<>' p, ... sn-1 '<>' p, sn]@.
 --
 -- (Idea and implementation taken from the @pretty@ package.)
-punctuate ∷ (Monoid s) ⇒ s → [s] → [s]
+punctuate :: (Monoid s) => s -> [s] -> [s]
 punctuate _ []     = []
 punctuate p (d:ds) = go d ds
     where
@@ -162,32 +159,32 @@ punctuate p (d:ds) = go d ds
 --------------------------------------------------------------------------------
 
 -- | @between b c s@ wraps the string-like @s@ between @b@ and @c@.
-between ∷ (Monoid s) ⇒ s → s → (s → s)
+between :: (Monoid s) => s -> s -> (s -> s)
 between open close = \x -> open <> x <> close
 
 
 -- | Wrap a string-like in @(...)@.
-parens ∷ (Monoid s, IsString s) ⇒ s → s
+parens :: (Monoid s, IsString s) => s -> s
 parens = between "(" ")"
 
 -- | Wrap a string-like in @[...]@.
-brackets ∷ (Monoid s, IsString s) ⇒ s → s
+brackets :: (Monoid s, IsString s) => s -> s
 brackets = between "[" "]"
 
 -- | Wrap a string-like in @{...}@.
-braces ∷ (Monoid s, IsString s) ⇒ s → s
+braces :: (Monoid s, IsString s) => s -> s
 braces = between "{" "}"
 
 -- | Wrap a string-like in @\<...\>@.
-angleBrackets ∷ (Monoid s, IsString s) ⇒ s → s
+angleBrackets :: (Monoid s, IsString s) => s -> s
 angleBrackets = between "<" ">"
 
 -- | Wrap a string-like in @\'...\'@.
-quotes ∷ (Monoid s, IsString s) ⇒ s → s
+quotes :: (Monoid s, IsString s) => s -> s
 quotes = between "'" "'"
 
 -- | Wrap a string-like in @\"...\"@.
-doubleQuotes ∷ (Monoid s, IsString s) ⇒ s → s
+doubleQuotes :: (Monoid s, IsString s) => s -> s
 doubleQuotes = between "\"" "\""
 
 
@@ -197,7 +194,7 @@ This function is supposed to be used infix as in:
 
 @(precedence >= 10) \`thenParens\` (\"fun\" \<+\> \"arg\")@
 -}
-thenParens ∷ (Monoid s, IsString s) ⇒ Bool → s → s
+thenParens :: (Monoid s, IsString s) => Bool -> s -> s
 thenParens True  = parens
 thenParens False = id
 
@@ -207,64 +204,64 @@ thenParens False = id
 --------------------------------------------------------------------------------
 
 -- | Convert a character to a string-like.
-char ∷ IsString s ⇒ Char → s
+char :: IsString s => Char -> s
 char c = fromString [c]
 
 
 -- | A ';' character.
-semi ∷ IsString s ⇒ s
+semi :: IsString s => s
 semi = char ';'
 
 -- | A ':' character.
-colon ∷ IsString s ⇒ s
+colon :: IsString s => s
 colon = char ':'
 
 -- | A ',' character.
-comma ∷ IsString s ⇒ s
+comma :: IsString s => s
 comma = char ','
 
 -- | A ' ' character.
-space ∷ IsString s ⇒ s
+space :: IsString s => s
 space = char ' '
 
 -- | A '\n' character.
-newline ∷ IsString s ⇒ s
+newline :: IsString s => s
 newline = char '\n'
 
 -- | A '=' character.
-equals ∷ IsString s ⇒ s
+equals :: IsString s => s
 equals = char '='
 
 -- | A '(' character.
-lparen ∷ IsString s ⇒ s
+lparen :: IsString s => s
 lparen = char '('
 
 -- | A ')' character.
-rparen ∷ IsString s ⇒ s
+rparen :: IsString s => s
 rparen = char ')'
 
 -- | A '[' character.
-lbrack ∷ IsString s ⇒ s
+lbrack :: IsString s => s
 lbrack = char '['
 
 -- | A ']' character.
-rbrack ∷ IsString s ⇒ s
+rbrack :: IsString s => s
 rbrack = char ']'
 
 -- | A '{' character.
-lbrace ∷ IsString s ⇒ s
+lbrace :: IsString s => s
 lbrace = char '{'
 
 -- | A '}' character.
-rbrace ∷ IsString s ⇒ s
+rbrace :: IsString s => s
 rbrace = char '}'
 
 -- | A \'<\' character.
-labrack ∷ IsString s ⇒ s
+labrack :: IsString s => s
 labrack = char '<'
 
 -- | A \'>\' character.
-rabrack ∷ IsString s ⇒ s
+rabrack :: IsString s => s
 rabrack = char '>'
 
 
@@ -273,25 +270,25 @@ rabrack = char '>'
 --------------------------------------------------------------------------------
 
 -- | Convert a @Show@able value to a string-like.
-fromShow ∷ (Show α, IsString s) ⇒ α → s
-fromShow = fromString ∘ show
+fromShow :: (Show a, IsString s) => a -> s
+fromShow = fromString . show
 
 -- | Convert an @Int@ to a string-like.
-int ∷ IsString s ⇒ Int → s
+int :: IsString s => Int -> s
 int = fromShow
 
 -- | Convert an @Integer@ to a string-like.
-integer ∷ IsString s ⇒ Integer → s
+integer :: IsString s => Integer -> s
 integer = fromShow
 
 -- | Convert a @Float@ to a string-like.
-float ∷ IsString s ⇒ Float → s
+float :: IsString s => Float -> s
 float = fromShow
 
 -- | Convert a @Double@ to a string-like.
-double ∷ IsString s ⇒ Double → s
+double :: IsString s => Double -> s
 double = fromShow
 
 -- | Convert a @Rational@ to a string-like.
-rational ∷ IsString s ⇒ Rational → s
+rational :: IsString s => Rational -> s
 rational = fromShow
