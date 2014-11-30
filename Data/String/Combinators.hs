@@ -90,7 +90,7 @@ import Data.Monoid ( mappend )
 -- Note that: @'<>' = 'mappend'@.
 (<>) :: Monoid s => s -> s -> s
 (<>) = mappend
-infixl 6 <>
+infixr 6 <>
 #endif
 
 --------------------------------------------------------------------------------
@@ -111,8 +111,8 @@ mid m x y = between x y m
 ($$) :: (Monoid s, IsString s) => s -> s -> s
 ($$) = mid newline
 
-infixl 6 <+>
-infixl 5 $$
+infixr 6 <+>
+infixr 5 $$
 
 {-| Combine the string-likes with a given function.
 
